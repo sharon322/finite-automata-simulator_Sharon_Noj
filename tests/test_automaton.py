@@ -1,6 +1,6 @@
 import unittest
 from automaton import Automaton
-from exception import ValidationError
+from exception import AutomatonValidationError
 
 class TestAutomaton(unittest.TestCase):
 
@@ -37,14 +37,14 @@ class TestAutomaton(unittest.TestCase):
         bad = dict(self.valid)
         bad["initial_state"] = "q9"
         a = Automaton(bad)
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(AutomatonValidationError):
             a.validate()
 
     def test_symbol_not_in_alphabet(self):
         bad = dict(self.valid)
         bad["transitions"] = bad["transitions"] + [{"from_state": "q0", "symbol": "2", "to_state": "q0"}]
         a = Automaton(bad)
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(AutomatonValidationError):
             a.validate()
 
     def test_missing_transition(self):
@@ -55,7 +55,7 @@ class TestAutomaton(unittest.TestCase):
             {"from_state": "q1", "symbol": "1", "to_state": "q0"}
         ]
         a = Automaton(bad)
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(AutomatonValidationError):
             a.validate()
 
 if __name__ == "__main__":
