@@ -1,27 +1,25 @@
-from graphviz import Digraph
-import time
-import os
+from exceptions import AutomatonValidationError
 
-def generate_diagram(automaton):
-    dot = Digraph(name=automaton.name)
-    dot.attr(rankdir='LR') 
+def validate_automaton(automaton):
+    if not automaton.initial_state:
+        raise AutomatonValidationError("Initial state is not defined.") 
+
+    if automaton.initial_state not in automaton.states:
+        raise AutomatonValidationError("Initial state does not exist in the state list")
+
+    if not automaton.acceptance_states:
+        raise AutomatonValidationError("There are no acceptance states in the automaton")
+
+    for state in automaton.acceptance_states:
+        if state not in automaton.states
+            raise AutomatonValidationError(f"Acceptance state '{state}' does not exist in the state list")
+        
+    for (from_state, symbol), to_state in automaton.transition_map.items():
+        if from_state not in automaton.states or to_state not in automaton.states:
+            raise AutomatonValidationError(f"Transition from non-existent state: {from_state} -> {to_state}")
+        if symbol not in automaton.alphabet:
+            raise AutomatonValidationError(f"Symbol '{symbol}' not in alphabet")
 
     for state in automaton.states:
-        if state in automaton.acceptance_states:
-            dot.node(state, shape='doublecircle')
-        else:
-            dot.node(state, shape='circle')
-
-    dot.node('', shape='none')
-    dot.edge('', automaton.initial_state)
-
-    for t in automaton.transitions:
-        dot.edge(t["from_state"], t["to_state"], label=t["symbol"])
-
-    if not os.path.exists('generated_diagrams'):
-        os.makedirs('generated_diagrams')
-
-    timestamp = int(time.time())
-    filename = f"generated_diagrams/automata_{automaton.id}_{timestamp}.png"
-    dot.render(filename, format='png', cleanup=True)
-    return filename
+        if not any(from_state == state for (from_state, _) in automaton.transition_map):
+            raise AutomatonValidationError(f"State '{state}' has no outgoing transitions")
