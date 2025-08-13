@@ -1,5 +1,14 @@
 # Finite Automata Simulator
 
-## Installation
-```bash
-pip install -r requirements.txt
+Simulador de Autómatas Finitos en Python que:
+- Valida la definición de autómatas desde JSON.
+- **Procesa cadenas recursivamente**.
+- Genera **diagramas de transición** con Graphviz.
+- Expone un **endpoint REST** con Flask.
+
+## Requirements
+- Python 3.10+
+- Graphviz (sistema) instalado y en el PATH
+- Librerías Python:
+  ```bash
+  pip install -r requirements.txt

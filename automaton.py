@@ -1,10 +1,10 @@
 from graphviz import Digraph
 import time
-from exceptions import AutomatonValidationError
+from exception import AutomatonValidationError
 from validators import validate_automaton
 
 class Automaton:
-    def __init__(self,id, name, initial_state, acceptance_states, alphabet, states, transitions, test_strings):
+    def __init__(self, id, name, initial_state, acceptance_states, alphabet, states, transitions, test_strings):
         self.id = id
         self.name = name
         self.initial_state = initial_state
@@ -27,28 +27,33 @@ class Automaton:
     def process_string_recursive(self, input_str, current_state=None):
         if current_state is None:
             current_state = self.initial_state
+
         if not input_str:
             return current_state in self.acceptance_states
 
         symbol = input_str[0]
-        next_state = self.transition_map.get((current_state, symbol))
+        next_state = self.transition_map.get(current_state, {}).get(symbol)
         if next_state is None:
             return False
+
         return self.process_string_recursive(input_str[1:], next_state)
 
     def generate_diagram(self, output_dir='generated_diagrams'):
         dot = Digraph(format='png')
         dot.attr(rankdir='LR')
 
+        # Flecha de estado inicial
         dot.node('', shape='none')
         dot.edge('', self.initial_state)
 
+        # Estados (doble círculo para aceptación)
         for state in self.states:
             if state in self.acceptance_states:
                 dot.node(state, shape='doublecircle')
             else:
                 dot.node(state, shape='circle')
 
+        # Transiciones
         for t in self.transitions:
             dot.edge(t["from_state"], t["to_state"], label=t["symbol"])
 
