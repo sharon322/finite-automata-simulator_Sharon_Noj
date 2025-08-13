@@ -42,18 +42,15 @@ class Automaton:
         dot = Digraph(format='png')
         dot.attr(rankdir='LR')
 
-        # Flecha de estado inicial
         dot.node('', shape='none')
         dot.edge('', self.initial_state)
 
-        # Estados (doble círculo para aceptación)
         for state in self.states:
             if state in self.acceptance_states:
                 dot.node(state, shape='doublecircle')
             else:
                 dot.node(state, shape='circle')
 
-        # Transiciones
         for t in self.transitions:
             dot.edge(t["from_state"], t["to_state"], label=t["symbol"])
 

@@ -23,7 +23,7 @@ class TestAutomaton(unittest.TestCase):
 
     def test_validate_success(self):
         a = Automaton(self.valid)
-        a.validate()  # no debe lanzar
+        a.validate() 
 
     def test_recursive_accept(self):
         a = Automaton(self.valid)
@@ -49,7 +49,6 @@ class TestAutomaton(unittest.TestCase):
 
     def test_missing_transition(self):
         bad = dict(self.valid)
-        # quita transición q1 con '0' para forzar "faltan transiciones completas"
         bad["transitions"] = [
             {"from_state": "q0", "symbol": "0", "to_state": "q0"},
             {"from_state": "q0", "symbol": "1", "to_state": "q1"},
