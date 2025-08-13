@@ -7,7 +7,7 @@ Simulador de Autómatas Finitos en Python que:
 - Expone un **endpoint REST** con Flask.
 
 ## Requirements
-- Python 3.10+
+- Python
 - Graphviz (sistema) instalado y en el PATH
 - Librerías Python:
   ```bash
