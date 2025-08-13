@@ -1,4 +1,4 @@
-from grapvis import Digraph
+from graphviz import Digraph
 import os
 import time
 
