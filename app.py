@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from automaton import Automaton
 from exception import AutomatonValidationError
 import os
+import json
 
 app = Flask(__name__)
 
@@ -11,7 +12,19 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 @app.route('/process-automata', methods=['POST'])
 def process_automata():
     try:
-        data = request.get_json()
+        # Detectar si es JSON puro
+        if request.is_json:
+            data = request.get_json()
+        else:
+            # Si es multipart/form-data
+            if 'file' in request.files:
+                file = request.files['file']
+                data = json.load(file)  # leer JSON del archivo
+            elif 'json' in request.form:
+                data = json.loads(request.form['json'])  # leer JSON de un campo form-data
+            else:
+                return jsonify({"error": "No se encontró JSON ni archivo en la petición"}), 415
+
         if not isinstance(data, list):
             return jsonify({"error": "Invalid JSON format, expected a list of automata"}), 400
 
